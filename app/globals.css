@@ -1,0 +1,712 @@
+@import "tailwindcss";
+
+:root {
+  /*
+   * Two-tier design tokens.
+   *
+   * Tier 1 — base scales (gray / blue / green / amber / red / accent),
+   * each with solid steps 1..12 and alpha steps a1..a12. The gray and
+   * accent scales are overwritten at runtime by `applyThemeCssVars`; the
+   * values below are a Graphite-dark / sky-accent snapshot to keep SSR
+   * consistent with the post-hydration theme.
+   *
+   * Tier 2 — semantic tokens map scale steps onto roles (bg-*, text-*,
+   * border-*, btn-*, status). Semantic mappings are mode-agnostic;
+   * light/dark lives entirely in Tier 1.
+   */
+
+  /* Gray (Graphite dark) */
+  --gray-1: #222222;
+  --gray-2: #272727;
+  --gray-3: #2d2d2d;
+  --gray-4: #333333;
+  --gray-5: #3c3c3c;
+  --gray-6: #474747;
+  --gray-7: #545454;
+  --gray-8: #636363;
+  --gray-9: #727272;
+  --gray-10: #868686;
+  --gray-11: #a5a5a5;
+  --gray-12: #efefef;
+  --gray-a1: rgba(0, 0, 0, 0);
+  --gray-a2: rgba(255, 255, 255, 0.02);
+  --gray-a3: rgba(255, 255, 255, 0.047);
+  --gray-a4: rgba(255, 255, 255, 0.075);
+  --gray-a5: rgba(255, 255, 255, 0.114);
+  --gray-a6: rgba(255, 255, 255, 0.165);
+  --gray-a7: rgba(255, 255, 255, 0.224);
+  --gray-a8: rgba(255, 255, 255, 0.294);
+  --gray-a9: rgba(255, 255, 255, 0.361);
+  --gray-a10: rgba(255, 255, 255, 0.455);
+  --gray-a11: rgba(255, 255, 255, 0.612);
+  --gray-a12: rgba(255, 255, 255, 0.871);
+
+  /* Accent (Sky preset) — overwritten at runtime */
+  --accent-1: #14202f;
+  --accent-2: #17253a;
+  --accent-3: #1c2d47;
+  --accent-4: #213556;
+  --accent-5: #2a4068;
+  --accent-6: #364e7d;
+  --accent-7: #455d92;
+  --accent-8: #576ea8;
+  --accent-9: #8bb8ff;
+  --accent-10: #a4c6ff;
+  --accent-11: #bfd8ff;
+  --accent-12: #ebf2ff;
+  --accent-a1: rgba(0, 0, 0, 0);
+  --accent-a2: rgba(106, 152, 220, 0.075);
+  --accent-a3: rgba(125, 169, 232, 0.137);
+  --accent-a4: rgba(131, 174, 240, 0.208);
+  --accent-a5: rgba(133, 177, 245, 0.29);
+  --accent-a6: rgba(136, 181, 251, 0.388);
+  --accent-a7: rgba(138, 183, 253, 0.502);
+  --accent-a8: rgba(139, 184, 255, 0.627);
+  --accent-a9: rgba(139, 184, 255, 1);
+  --accent-a10: rgba(164, 198, 255, 1);
+  --accent-a11: rgba(191, 216, 255, 1);
+  --accent-a12: rgba(235, 242, 255, 1);
+
+  /* Blue (informational, constant across accents) */
+  --blue-1: #1a1f2c;
+  --blue-2: #1c2438;
+  --blue-3: #1f2a48;
+  --blue-4: #233159;
+  --blue-5: #27396d;
+  --blue-6: #2d4484;
+  --blue-7: #34509e;
+  --blue-8: #3c5eb7;
+  --blue-9: #3b82f6;
+  --blue-10: #558ffb;
+  --blue-11: #86a6fd;
+  --blue-12: #dde5fb;
+
+  /* Green */
+  --green-1: #141d18;
+  --green-2: #16221c;
+  --green-3: #192a21;
+  --green-4: #1c3226;
+  --green-5: #1f3c2d;
+  --green-6: #234735;
+  --green-7: #27533e;
+  --green-8: #2b5e46;
+  --green-9: #22c55e;
+  --green-10: #45d074;
+  --green-11: #84dd9d;
+  --green-12: #def3e4;
+
+  /* Amber */
+  --amber-1: #201a11;
+  --amber-2: #261f13;
+  --amber-3: #2f2617;
+  --amber-4: #392e1b;
+  --amber-5: #46381f;
+  --amber-6: #554424;
+  --amber-7: #665128;
+  --amber-8: #795f2b;
+  --amber-9: #f59e0b;
+  --amber-10: #f7ab2b;
+  --amber-11: #f8c064;
+  --amber-12: #fcead0;
+
+  /* Red */
+  --red-1: #22181a;
+  --red-2: #291b1d;
+  --red-3: #321f22;
+  --red-4: #3d2325;
+  --red-5: #4b2628;
+  --red-6: #5c2a2d;
+  --red-7: #6f2d30;
+  --red-8: #842f33;
+  --red-9: #ef4444;
+  --red-10: #f36363;
+  --red-11: #f78f8f;
+  --red-12: #fcdada;
+
+  /* --- Tier 2 semantic tokens --- */
+  --bg-desktop: var(--gray-1);
+  --bg-window: color-mix(in srgb, var(--gray-1) 94%, transparent);
+  --bg-panel: color-mix(in srgb, var(--gray-2) 88%, transparent);
+  --bg-surface: var(--gray-3);
+  --bg-surface-hover: var(--gray-4);
+  --bg-surface-active: var(--gray-5);
+  --bg-inverse: var(--gray-12);
+  --bg-overlay: var(--gray-a6);
+
+  --text-primary: var(--gray-12);
+  --text-secondary: var(--gray-11);
+  --text-tertiary: var(--gray-10);
+  --text-disabled: var(--gray-8);
+  --text-inverse: var(--gray-1);
+  --text-accent: var(--accent-11);
+
+  --icon-primary: var(--gray-12);
+  --icon-secondary: var(--gray-11);
+  --icon-tertiary: var(--gray-10);
+  --icon-disabled: var(--gray-8);
+  --icon-inverse: var(--gray-1);
+  --icon-accent: var(--accent-10);
+
+  --border-subtle: var(--gray-a4);
+  --border-default: var(--gray-a6);
+  --border-strong: var(--gray-a7);
+  --border-active: var(--gray-a8);
+  --border-focus: var(--accent-9);
+  --border-transparent: transparent;
+
+  --btn-primary-bg: var(--gray-12);
+  --btn-primary-hover: var(--gray-11);
+  --btn-primary-text: var(--gray-1);
+  --btn-primary-icon: var(--gray-1);
+
+  --btn-secondary-bg: var(--gray-2);
+  --btn-secondary-hover: var(--gray-3);
+  --btn-secondary-active: var(--gray-4);
+  --btn-secondary-border: var(--gray-a6);
+  --btn-secondary-text: var(--gray-12);
+
+  --btn-ghost-bg: transparent;
+  --btn-ghost-hover: var(--gray-a3);
+  --btn-ghost-active: var(--gray-a4);
+  --btn-ghost-text: var(--gray-11);
+
+  --input-bg: var(--gray-1);
+  --input-bg-hover: var(--gray-2);
+  --input-border: var(--border-default);
+  --input-border-hover: var(--border-strong);
+  --input-text: var(--text-primary);
+  --input-placeholder: var(--text-tertiary);
+
+  --accent-bg: var(--accent-2);
+  --accent-border: var(--accent-6);
+  --accent-solid: var(--accent-9);
+  --accent-solid-hover: var(--accent-10);
+
+  --success-bg: var(--green-2);
+  --success-border: var(--green-6);
+  --success-solid: var(--green-9);
+  --success-text: var(--green-11);
+
+  --warning-bg: var(--amber-2);
+  --warning-border: var(--amber-6);
+  --warning-solid: var(--amber-9);
+  --warning-text: var(--amber-11);
+
+  --danger-bg: var(--red-2);
+  --danger-border: var(--red-6);
+  --danger-solid: var(--red-9);
+  --danger-solid-hover: var(--red-10);
+  --danger-text: var(--red-11);
+
+  --shadow-elevation-1: 0 8px 30px var(--gray-a3);
+  --shadow-elevation-2: 0 12px 40px var(--gray-a4);
+  --shadow-elevation-3: 0 4px 14px var(--gray-a5);
+  --shadow-elevation-4: 0 2px 10px var(--gray-a6);
+  --shadow-icon-tile: 0 1px 2px var(--gray-a4), 0 0 0 0.5px var(--gray-a3);
+  --bg-icon-tile: linear-gradient(135deg, var(--gray-5), var(--gray-4));
+
+  /* --- Legacy aliases (temporary during migration, dropped in Phase 5) --- */
+  --neutral-50: #eff4ff;
+  --neutral-100: #d9dfea;
+  --neutral-200: #c4cbd5;
+  --neutral-300: #aeb6c0;
+  --neutral-400: #878d93;
+  --neutral-500: #616367;
+  --neutral-600: #3a3a3a;
+  --neutral-700: #303030;
+  --neutral-800: #2c2c2c;
+  --neutral-900: #282828;
+  --neutral-950: #222222;
+  --background: var(--bg-desktop);
+  --foreground: var(--text-primary);
+  --desktop: var(--bg-desktop);
+  --desktop-highlight: var(--bg-surface-hover);
+  --panel: var(--bg-panel);
+  --window: var(--bg-window);
+  --window-foreground: var(--text-primary);
+  --window-muted: var(--text-secondary);
+  --window-border: var(--border-subtle);
+  --window-border-strong: var(--border-default);
+  --notesPopoverSolid: var(--gray-3);
+  --notesMutedSolid: var(--gray-4);
+  --menubar-button: transparent;
+  --menubar-button-hover: var(--accent-solid);
+  --menubar-button-text: var(--text-primary);
+  --menubar-button-text-hover: var(--text-inverse);
+  --menubar-button-inactive: transparent;
+  --menubar-icon-button-hover: var(--gray-a4);
+  --accent: var(--accent-solid);
+  --accent-foreground: #111a28;
+  --selection: var(--accent-a3);
+  --danger: var(--danger-solid);
+  --button-primary-bg: var(--accent-solid);
+  --button-primary-bg-hover: var(--accent-7);
+  --button-primary-bg-active: var(--accent-8);
+  --button-primary-border: transparent;
+  --button-primary-border-hover: var(--accent-solid);
+  --button-primary-foreground: var(--accent-foreground);
+  --button-primary-ring: var(--accent-a6);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent-solid);
+  --primary-foreground: var(--text-inverse);
+  --secondary: var(--bg-surface);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-surface-hover);
+  --muted-foreground: var(--text-secondary);
+  --destructive: var(--danger-solid);
+  --border: var(--border-subtle);
+  --input: var(--border-default);
+  --ring: var(--border-focus);
+
+  /* Tier 1 — component scale (fixed) */
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Tier 1 — window scale (fixed) */
+  --radius-window-none: 0px;
+  --radius-window-sm: 8px;
+  --radius-window-md: 12px;
+  --radius-window-lg: 16px;
+  --radius-window-full: 24px;
+
+  /* Tier 2 — semantic, driven by the user's "Radius" preset in Settings.
+     Default = lg (10px components / 16px windows). Overwritten at runtime
+     by `applyThemeCssVars`. */
+  --radius: var(--radius-lg);
+  --radius-window: var(--radius-window-lg);
+  --shadow-panel: 0 18px 45px var(--gray-a4);
+  --shadow-window: 0 28px 80px var(--gray-a6);
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: color-mix(in srgb, var(--gray-6) 88%, var(--gray-12) 12%);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--gray-6) 76%, var(--gray-12) 24%);
+
+  /*
+   * Default body font stack — overwritten at runtime by `applyThemeCssVars`
+   * to point at one of the four `--font-*` variables loaded by next/font in
+   * `app/layout.tsx`. The system fallback below keeps SSR sensible before
+   * hydration and survives cases where next/font hasn't injected yet.
+   */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  /* Tailwind's code-family token follows the selected RemOS theme font. */
+}
+
+@theme inline {
+  /* Base scales (Tier 1) */
+  --color-gray-1: var(--gray-1);
+  --color-gray-2: var(--gray-2);
+  --color-gray-3: var(--gray-3);
+  --color-gray-4: var(--gray-4);
+  --color-gray-5: var(--gray-5);
+  --color-gray-6: var(--gray-6);
+  --color-gray-7: var(--gray-7);
+  --color-gray-8: var(--gray-8);
+  --color-gray-9: var(--gray-9);
+  --color-gray-10: var(--gray-10);
+  --color-gray-11: var(--gray-11);
+  --color-gray-12: var(--gray-12);
+  --color-gray-a1: var(--gray-a1);
+  --color-gray-a2: var(--gray-a2);
+  --color-gray-a3: var(--gray-a3);
+  --color-gray-a4: var(--gray-a4);
+  --color-gray-a5: var(--gray-a5);
+  --color-gray-a6: var(--gray-a6);
+  --color-gray-a7: var(--gray-a7);
+  --color-gray-a8: var(--gray-a8);
+  --color-gray-a9: var(--gray-a9);
+  --color-gray-a10: var(--gray-a10);
+  --color-gray-a11: var(--gray-a11);
+  --color-gray-a12: var(--gray-a12);
+  --color-accent-1: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-accent-4: var(--accent-4);
+  --color-accent-5: var(--accent-5);
+  --color-accent-6: var(--accent-6);
+  --color-accent-7: var(--accent-7);
+  --color-accent-8: var(--accent-8);
+  --color-accent-9: var(--accent-9);
+  --color-accent-10: var(--accent-10);
+  --color-accent-11: var(--accent-11);
+  --color-accent-12: var(--accent-12);
+  --color-accent-a1: var(--accent-a1);
+  --color-accent-a2: var(--accent-a2);
+  --color-accent-a3: var(--accent-a3);
+  --color-accent-a4: var(--accent-a4);
+  --color-accent-a5: var(--accent-a5);
+  --color-accent-a6: var(--accent-a6);
+  --color-accent-a7: var(--accent-a7);
+  --color-accent-a8: var(--accent-a8);
+  --color-accent-a9: var(--accent-a9);
+  --color-accent-a10: var(--accent-a10);
+  --color-accent-a11: var(--accent-a11);
+  --color-accent-a12: var(--accent-a12);
+  --color-blue-1: var(--blue-1);
+  --color-blue-2: var(--blue-2);
+  --color-blue-3: var(--blue-3);
+  --color-blue-4: var(--blue-4);
+  --color-blue-5: var(--blue-5);
+  --color-blue-6: var(--blue-6);
+  --color-blue-7: var(--blue-7);
+  --color-blue-8: var(--blue-8);
+  --color-blue-9: var(--blue-9);
+  --color-blue-10: var(--blue-10);
+  --color-blue-11: var(--blue-11);
+  --color-blue-12: var(--blue-12);
+  --color-green-1: var(--green-1);
+  --color-green-2: var(--green-2);
+  --color-green-3: var(--green-3);
+  --color-green-4: var(--green-4);
+  --color-green-5: var(--green-5);
+  --color-green-6: var(--green-6);
+  --color-green-7: var(--green-7);
+  --color-green-8: var(--green-8);
+  --color-green-9: var(--green-9);
+  --color-green-10: var(--green-10);
+  --color-green-11: var(--green-11);
+  --color-green-12: var(--green-12);
+  --color-amber-1: var(--amber-1);
+  --color-amber-2: var(--amber-2);
+  --color-amber-3: var(--amber-3);
+  --color-amber-4: var(--amber-4);
+  --color-amber-5: var(--amber-5);
+  --color-amber-6: var(--amber-6);
+  --color-amber-7: var(--amber-7);
+  --color-amber-8: var(--amber-8);
+  --color-amber-9: var(--amber-9);
+  --color-amber-10: var(--amber-10);
+  --color-amber-11: var(--amber-11);
+  --color-amber-12: var(--amber-12);
+  --color-red-1: var(--red-1);
+  --color-red-2: var(--red-2);
+  --color-red-3: var(--red-3);
+  --color-red-4: var(--red-4);
+  --color-red-5: var(--red-5);
+  --color-red-6: var(--red-6);
+  --color-red-7: var(--red-7);
+  --color-red-8: var(--red-8);
+  --color-red-9: var(--red-9);
+  --color-red-10: var(--red-10);
+  --color-red-11: var(--red-11);
+  --color-red-12: var(--red-12);
+
+  /* Semantic (Tier 2) */
+  --color-desktop: var(--bg-desktop);
+  --color-window: var(--bg-window);
+  --color-panel: var(--bg-panel);
+  --color-surface: var(--bg-surface);
+  --color-surface-hover: var(--bg-surface-hover);
+  --color-surface-active: var(--bg-surface-active);
+  --color-inverse: var(--bg-inverse);
+  --color-overlay: var(--bg-overlay);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-tertiary: var(--text-tertiary);
+  --color-disabled: var(--text-disabled);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-accent: var(--text-accent);
+  /*
+   * Border roles: registered as `--color-*` (not `--color-border-*`) so
+   * Tailwind v4 generates short-form utilities `border-subtle`,
+   * `border-default`, etc. The --color-* namespace uses everything after
+   * the prefix as the utility name, so `--color-border-subtle` would emit
+   * `border-border-subtle` — not what the codebase uses.
+   */
+  --color-subtle: var(--border-subtle);
+  --color-default: var(--border-default);
+  --color-strong: var(--border-strong);
+  --color-active: var(--border-active);
+  --color-focus: var(--border-focus);
+  --color-btn-primary: var(--btn-primary-bg);
+  --color-btn-primary-hover: var(--btn-primary-hover);
+  --color-btn-primary-text: var(--btn-primary-text);
+  --color-btn-secondary: var(--btn-secondary-bg);
+  --color-btn-secondary-hover: var(--btn-secondary-hover);
+  --color-btn-secondary-active: var(--btn-secondary-active);
+  --color-btn-secondary-border: var(--btn-secondary-border);
+  --color-btn-secondary-text: var(--btn-secondary-text);
+  --color-btn-ghost: var(--btn-ghost-bg);
+  --color-btn-ghost-hover: var(--btn-ghost-hover);
+  --color-btn-ghost-active: var(--btn-ghost-active);
+  --color-btn-ghost-text: var(--btn-ghost-text);
+  --color-input: var(--input-bg);
+  --color-input-hover: var(--input-bg-hover);
+  --color-input-border: var(--input-border);
+  --color-input-border-hover: var(--input-border-hover);
+  --color-input-text: var(--input-text);
+  --color-input-placeholder: var(--input-placeholder);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-border: var(--accent-border);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-solid-hover: var(--accent-solid-hover);
+  --color-accent: var(--accent-solid);
+  --color-success-bg: var(--success-bg);
+  --color-success-border: var(--success-border);
+  --color-success-solid: var(--success-solid);
+  --color-success-text: var(--success-text);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+  --color-warning-solid: var(--warning-solid);
+  --color-warning-text: var(--warning-text);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-border: var(--danger-border);
+  --color-danger-solid: var(--danger-solid);
+  --color-danger-solid-hover: var(--danger-solid-hover);
+  --color-danger-text: var(--danger-text);
+  --color-danger: var(--danger-solid);
+
+  /* Legacy utilities (removed in Phase 5) */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-desktop-highlight: var(--desktop-highlight);
+  --color-window-foreground: var(--window-foreground);
+  --color-window-muted: var(--window-muted);
+  --color-window-border: var(--window-border);
+  --color-window-border-strong: var(--window-border-strong);
+  --color-menubar-button: var(--menubar-button);
+  --color-menubar-button-hover: var(--menubar-button-hover);
+  --color-menubar-button-text: var(--menubar-button-text);
+  --color-menubar-button-text-hover: var(--menubar-button-text-hover);
+  --color-menubar-button-inactive: var(--menubar-button-inactive);
+  --color-menubar-icon-button-hover: var(--menubar-icon-button-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-text: var(--text-accent);
+  --color-selection: var(--selection);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  /* Tier 1 — fixed scale steps, always available regardless of preset */
+  --radius-none: var(--radius-none);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-full: var(--radius-full);
+  --radius-window-none: var(--radius-window-none);
+  --radius-window-sm: var(--radius-window-sm);
+  --radius-window-md: var(--radius-window-md);
+  --radius-window-lg: var(--radius-window-lg);
+  --radius-window-full: var(--radius-window-full);
+
+  /* Tier 2 — semantic utilities `rounded` and `rounded-window`, driven by
+     the user-selected radius preset via `applyThemeCssVars`. */
+  --radius: var(--radius);
+  --radius-window: var(--radius-window);
+  --shadow-panel: var(--shadow-panel);
+  --shadow-window: var(--shadow-window);
+  --shadow-elevation-1: var(--shadow-elevation-1);
+  --shadow-elevation-2: var(--shadow-elevation-2);
+  --shadow-elevation-3: var(--shadow-elevation-3);
+  --shadow-elevation-4: var(--shadow-elevation-4);
+  --shadow-icon-tile: var(--shadow-icon-tile);
+  --bg-icon-tile: var(--bg-icon-tile);
+
+  /* Compact RemOS type step below Tailwind's 12px `text-xs`. */
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.875rem;
+
+  /* Sticky note colors (pastel-ish, readable with black text in both modes) */
+  --color-sticky-yellow: #fde68a;
+  --color-sticky-peach: #ffc9a8;
+  --color-sticky-rose: #ffb3c6;
+  --color-sticky-lavender: #cdbdf5;
+  --color-sticky-mint: #b6ecc6;
+  --color-sticky-sky: #b2dbff;
+}
+
+/*
+ * Elevation bundles — one utility sets background + border + shadow
+ * together. Consumers opt out per-property by layering another utility
+ * (e.g. `elevation-2 bg-accent-solid` keeps border + shadow, swaps bg).
+ */
+@utility elevation-0 {
+  background: var(--bg-desktop);
+  border: none;
+  box-shadow: none;
+}
+
+@utility elevation-1 {
+  background: var(--bg-window);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-elevation-1);
+}
+
+@utility elevation-2 {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-elevation-2);
+}
+
+@utility elevation-3 {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-elevation-3);
+}
+
+@utility elevation-4 {
+  background: var(--bg-inverse);
+  border: none;
+  box-shadow: var(--shadow-elevation-4);
+}
+
+/* Canonical type styles. Font family always inherits from the active theme. */
+@utility type-3xl {
+  font-size: var(--text-3xl);
+  line-height: var(--text-3xl--line-height);
+  font-weight: 700;
+}
+
+@utility type-2xl {
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+  font-weight: 600;
+}
+
+@utility type-xl {
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
+  font-weight: 600;
+}
+
+@utility type-lg {
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
+  font-weight: 500;
+}
+
+@utility type-base {
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  font-weight: 400;
+}
+
+@utility type-sm {
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  font-weight: 400;
+}
+
+@utility type-xs {
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  font-weight: 400;
+}
+
+@utility type-2xs {
+  font-size: var(--text-2xs);
+  line-height: var(--text-2xs--line-height);
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Scrollbars (Firefox + WebKit) — uses :root scrollbar-* tokens */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid var(--scrollbar-track);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/*
+ * OS-style scrollbars: hide thumb until the scroll container is hovered (matches command palette).
+ * Apply `.os-scrollbar` to any overflow-auto region that should use this treatment.
+ */
+.os-scrollbar {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-track) var(--scrollbar-track);
+}
+
+.os-scrollbar:hover {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.os-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.os-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border: 2px solid var(--scrollbar-track);
+  border-radius: 999px;
+  background-clip: padding-box;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.os-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border: 2px solid var(--scrollbar-track);
+  background-clip: padding-box;
+}
+
+.os-scrollbar:hover::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
