@@ -47,6 +47,7 @@ export const ACCENT_PRESET_IDS = [
   "coral",
   "rose",
   "violet",
+  "heather",
 ] as const;
 
 export type AccentPresetId = (typeof ACCENT_PRESET_IDS)[number];
@@ -166,6 +167,7 @@ export const ACCENT_PRESETS: readonly AccentPreset[] = [
   { id: "coral", label: "Coral", color: "#ff8a6b" },
   { id: "rose", label: "Rose", color: "#ff7da6" },
   { id: "violet", label: "Violet", color: "#b18cff" },
+  { id: "heather", label: "Heather", color: "#b2a6d3" },
 ] as const;
 
 const SANS_FALLBACK =
