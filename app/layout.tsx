@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 
 import "@/app/globals.css";
 
+import { gtWalsheim } from "@remoui/gt-walsheim";
 import { ThemeProvider } from "@/lib/theme/use-theme";
 import {
   DEFAULT_THEME_SETTINGS,
@@ -33,11 +34,14 @@ const figtree = Figtree({
   display: "swap",
 });
 
+// `@remoui/gt-walsheim` resolves to next/font/local when the files exist, or to a
+// stub with an empty `variable` when they do not (see next.config.ts).
 const fontVariableClassName = [
   inter.variable,
   ebGaramond.variable,
   ubuntuSansMono.variable,
   figtree.variable,
+  ...(gtWalsheim.variable ? [gtWalsheim.variable] : []),
 ].join(" ");
 
 export const metadata: Metadata = {
@@ -62,6 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // applyThemeCssVars at runtime). CSS custom-property substitution resolves
     // at the declaring element, so --font-sans's inner var(--font-X) only
     // resolves when --font-X is defined on the same element.
+    // --font-gt-walsheim is only present when the local files exist.
     <html lang="en" className={fontVariableClassName} style={themeStyles}>
       <body>
         <ThemeProvider>{children}</ThemeProvider>

@@ -43,12 +43,13 @@ lib/
   theme/
     base-scales.ts         OKLCH 12-step scale generator (pure)
     theme-customization.ts Accent/neutral/font/radius presets + applyThemeCssVars
+    theme-presets.ts       Named look presets (mode + accent + palette + font + radius)
     css-color.ts           CSS color → hex parsing
     theme-tokens.ts        JS token map (colors, radius, shadow, motion)
     use-theme.tsx          localStorage-backed ThemeProvider / useSettings / setTheme
 components/
   ui/                      9 primitives (button, dropdown-menu, slider, switch, …)
-  theme/                   ThemeSwitcherControls (mode/accent/background/font/radius)
+  theme/                   ThemeSwitcherControls (preset/mode/accent/background/font/radius)
   showcase/                The docs site (sidebar + per-component pages)
 ```
 
@@ -80,10 +81,11 @@ Tailwind v4 exposes these as utilities via the `@theme inline` block, so you wri
 ## The theme engine
 
 Theme is five independent dimensions: **mode** (dark/light/system), **accent**
-(8 presets or a custom hex), **background** (6 dark + 6 light neutral palettes),
-**font** (4 Google Fonts), and **radius** (5 presets). Changing any of them
-regenerates the relevant CSS variables at runtime and re-skins the whole UI in
-place — no reload.
+(9 presets or a custom hex), **background** (7 dark + 6 light neutral palettes),
+**font** (4 Google Fonts plus optional local GT Walsheim Pro), and **radius**
+(5 presets). **Look presets** apply a complete combination of those dimensions
+in one click. Changing any of them regenerates the relevant CSS variables at
+runtime and re-skins the whole UI in place — no reload.
 
 The state lives in [`lib/theme/use-theme.tsx`](lib/theme/use-theme.tsx), a small
 localStorage-backed store:
@@ -109,16 +111,26 @@ function AccentToggle() {
 `ThemeProvider` (mounted in `app/layout.tsx`) applies the persisted theme on load
 and keeps `<html>`'s CSS variables in sync. The layout server-renders the default
 theme inline so first paint matches — no theme flash for the default. A drop-in
-`ThemeSwitcherControls` component gives you the full mode/accent/background/font/
-radius picker.
+`ThemeSwitcherControls` component gives you the full preset/mode/accent/background/
+font/radius picker.
 
-### Adding an accent or neutral palette
+### Adding an accent, palette, or look preset
 
-Edit the preset arrays in
+Edit the arrays in
 [`lib/theme/theme-customization.ts`](lib/theme/theme-customization.ts):
 `ACCENT_PRESETS`, `DARK_NEUTRAL_PALETTES`, `LIGHT_NEUTRAL_PALETTES`,
 `FONT_PRESETS`, `RADIUS_PRESETS`. A new accent needs only a seed hex — the OKLCH
 generator derives the full 12-step scale for both light and dark.
+
+Named looks live in
+[`lib/theme/theme-presets.ts`](lib/theme/theme-presets.ts). Each one is a full
+`ThemeSettings` snapshot. The Framer rebuild of remibousk.com is **Velvet Folio**
+(Velvet neutrals, Cobalt accent, GT Walsheim Pro).
+
+GT Walsheim Pro is optional and local — drop the `.woff2` files into
+`fonts/gt-walsheim/` (gitignored; not shipped). Without them, Velvet Folio and
+the `gt-walsheim` font preset fall back to Inter; everything else about the look
+still applies.
 
 ## The primitives
 

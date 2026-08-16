@@ -288,7 +288,7 @@
 
   /*
    * Default body font stack — overwritten at runtime by `applyThemeCssVars`
-   * to point at one of the four `--font-*` variables loaded by next/font in
+   * to point at one of the `--font-*` variables loaded by next/font in
    * `app/layout.tsx`. The system fallback below keeps SSR sensible before
    * hydration and survives cases where next/font hasn't injected yet.
    */

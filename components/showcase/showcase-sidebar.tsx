@@ -115,6 +115,10 @@ function ThemeAccordion() {
                 className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center gap-2"
               >
                 <ThemeSwatchDot
+                  layoutId="theme-dot-preset"
+                  swatch={summary.preset.swatch}
+                />
+                <ThemeSwatchDot
                   layoutId="theme-dot-mode"
                   swatch={summary.mode.swatch}
                 />

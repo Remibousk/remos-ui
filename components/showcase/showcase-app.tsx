@@ -47,6 +47,10 @@ const RadiusPage = lazyPage(
   () => import("@/components/showcase/pages/radius"),
   "RadiusPage",
 );
+const PresetsPage = lazyPage(
+  () => import("@/components/showcase/pages/presets-page"),
+  "PresetsPage",
+);
 const BreadcrumbPage = lazyPage(
   () => import("@/components/showcase/pages/breadcrumb-page"),
   "BreadcrumbPage",
@@ -85,6 +89,7 @@ const PAGES: ShowcasePageDef[] = [
   { id: "colors", label: "Colors", description: "Semantic color tokens", section: "foundations", component: ColorsPage },
   { id: "typography", label: "Typography", description: "Type scale and styles", section: "foundations", component: TypographyPage },
   { id: "radius", label: "Radius", description: "Corner radius scale & presets", section: "foundations", component: RadiusPage },
+  { id: "presets", label: "Presets", description: "Named looks across every theme", section: "foundations", component: PresetsPage },
   { id: "breadcrumb", label: "Breadcrumb", description: "Path navigation", section: "components", component: BreadcrumbPage },
   { id: "button", label: "Button", description: "Variants & sizes", section: "components", component: ButtonPage },
   { id: "button-group", label: "Button Group", description: "Segmented actions", section: "components", component: ButtonGroupPage },

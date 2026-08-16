@@ -85,7 +85,7 @@ export function TypographyPage() {
           Typography
         </h1>
         <p className="max-w-xl text-sm leading-relaxed text-secondary">
-          Two-tier font tokens. Tier 1 exposes each loaded Google Font. Tier 2{" "}
+          Two-tier font tokens. Tier 1 exposes each loaded font. Tier 2{" "}
           <code className="type-xs">--font-sans</code> applies the
           selected preset across every surface. Code and data inherit the same
           shared type scale, with tabular figures where alignment matters.
@@ -118,7 +118,7 @@ export function TypographyPage() {
 
       <DsSection
         title="Font presets"
-        description="Loaded at build time via next/font/google. Select a preset in the theme panel to apply it across every surface."
+        description="Loaded at build time via next/font. Select a preset in the theme panel to apply it across every surface."
       >
         <div className="space-y-3">
           {FONT_PRESETS.map((preset) => {
@@ -135,12 +135,16 @@ export function TypographyPage() {
                 <div
                   className="flex size-16 shrink-0 items-center justify-center rounded-lg border border-subtle bg-gray-a2 text-3xl text-primary"
                   aria-hidden
+                  style={{ fontFamily: `${preset.cssVar}, ${preset.fallback}` }}
                 >
                   Aa
                 </div>
                 <div className="min-w-0 flex-1 space-y-2">
                   <div className="flex items-baseline gap-3">
-                    <h3 className="text-base font-medium text-primary">
+                    <h3
+                      className="text-base font-medium text-primary"
+                      style={{ fontFamily: `${preset.cssVar}, ${preset.fallback}` }}
+                    >
                       {preset.label}
                     </h3>
                     {isActive ? (
@@ -149,7 +153,10 @@ export function TypographyPage() {
                       </span>
                     ) : null}
                   </div>
-                  <p className="text-sm text-secondary">
+                  <p
+                    className="text-sm text-secondary"
+                    style={{ fontFamily: `${preset.cssVar}, ${preset.fallback}` }}
+                  >
                     The quick brown fox jumps over the lazy dog. 0123456789.
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
@@ -186,7 +193,10 @@ export function TypographyPage() {
                   <code className="type-xs text-secondary">
                     {preset.cssVar.slice(4, -1)}
                   </code>
-                  <span className="text-lg text-primary">
+                  <span
+                    className="text-lg text-primary"
+                    style={{ fontFamily: `${preset.cssVar}, ${preset.fallback}` }}
+                  >
                     Aa
                   </span>
                 </div>

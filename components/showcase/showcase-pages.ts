@@ -22,7 +22,7 @@ export const SHOWCASE_SECTION_LABELS: Record<ShowcasePageSection, string> = {
 
 export const SHOWCASE_SECTION_DESCRIPTIONS: Record<ShowcasePageSection, string> = {
   foundations:
-    "Core design tokens: the colors, typography, and radius that define the system.",
+    "Core design tokens: the colors, typography, radius, and named look presets that define the system.",
   components:
     "Reusable building blocks, from low-level primitives to composed patterns.",
 };
