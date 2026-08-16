@@ -45,11 +45,11 @@ export const THEME_LOOK_PRESETS: readonly ThemeLookPreset[] = [
   look(
     "velvet-folio",
     "Velvet Folio",
-    "The remibousk.com rebuild — aubergine dusk, deep cobalt, GT Walsheim.",
+    "Aubergine dusk, with a heather accent drawn from the same neutrals.",
     "dark",
     {
       mode: "dark",
-      accent: { mode: "preset", presetId: "cobalt" },
+      accent: { mode: "preset", presetId: "heather" },
       neutral: { darkPaletteId: "velvet", lightPaletteId: "canvas" },
       font: { presetId: "gt-walsheim" },
       radius: { presetId: "md" },

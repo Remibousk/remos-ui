@@ -81,7 +81,7 @@ Tailwind v4 exposes these as utilities via the `@theme inline` block, so you wri
 ## The theme engine
 
 Theme is five independent dimensions: **mode** (dark/light/system), **accent**
-(9 presets or a custom hex), **background** (7 dark + 6 light neutral palettes),
+(10 presets or a custom hex), **background** (7 dark + 6 light neutral palettes),
 **font** (4 Google Fonts plus optional local GT Walsheim Pro), and **radius**
 (5 presets). **Look presets** apply a complete combination of those dimensions
 in one click. Changing any of them regenerates the relevant CSS variables at
@@ -125,7 +125,7 @@ generator derives the full 12-step scale for both light and dark.
 Named looks live in
 [`lib/theme/theme-presets.ts`](lib/theme/theme-presets.ts). Each one is a full
 `ThemeSettings` snapshot. The Framer rebuild of remibousk.com is **Velvet Folio**
-(Velvet neutrals, Cobalt accent, GT Walsheim Pro).
+(Velvet neutrals, Heather accent, GT Walsheim Pro).
 
 GT Walsheim Pro is optional and local — drop the `.woff2` files into
 `fonts/gt-walsheim/` (gitignored; not shipped). Without them, Velvet Folio and
