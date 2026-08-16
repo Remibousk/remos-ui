@@ -192,7 +192,9 @@ export const FONT_PRESETS: readonly FontPreset[] = [
   {
     id: "gt-walsheim",
     label: "GT Walsheim Pro",
-    cssVar: "var(--font-gt-walsheim)",
+    // Optional local face: when the files are absent, --font-gt-walsheim is not
+    // defined on <html>, so this resolves to Inter (same stack as the inter preset).
+    cssVar: "var(--font-gt-walsheim, var(--font-inter))",
     fallback: SANS_FALLBACK,
   },
 ] as const;

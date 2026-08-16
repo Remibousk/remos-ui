@@ -15,7 +15,8 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@remoui/gt-walsheim": ["./app/fonts/gt-walsheim.stub.ts"]
     }
   },
   "include": [

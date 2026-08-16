@@ -5,11 +5,11 @@ import {
   Inter,
   Ubuntu_Sans_Mono,
 } from "next/font/google";
-import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import "@/app/globals.css";
 
+import { gtWalsheim } from "@remoui/gt-walsheim";
 import { ThemeProvider } from "@/lib/theme/use-theme";
 import {
   DEFAULT_THEME_SETTINGS,
@@ -33,44 +33,15 @@ const figtree = Figtree({
   variable: "--font-figtree",
   display: "swap",
 });
-const gtWalsheim = localFont({
-  src: [
-    {
-      path: "../fonts/gt-walsheim/GTWalsheimPro-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/gt-walsheim/GTWalsheimPro-RegularOblique.woff2",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "../fonts/gt-walsheim/GTWalsheimPro-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../fonts/gt-walsheim/GTWalsheimPro-MediumOblique.woff2",
-      weight: "500",
-      style: "italic",
-    },
-    {
-      path: "../fonts/gt-walsheim/GTWalsheimPro-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
-  variable: "--font-gt-walsheim",
-  display: "swap",
-});
 
+// `@remoui/gt-walsheim` resolves to next/font/local when the files exist, or to a
+// stub with an empty `variable` when they do not (see next.config.ts).
 const fontVariableClassName = [
   inter.variable,
   ebGaramond.variable,
   ubuntuSansMono.variable,
   figtree.variable,
-  gtWalsheim.variable,
+  ...(gtWalsheim.variable ? [gtWalsheim.variable] : []),
 ].join(" ");
 
 export const metadata: Metadata = {
@@ -95,6 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // applyThemeCssVars at runtime). CSS custom-property substitution resolves
     // at the declaring element, so --font-sans's inner var(--font-X) only
     // resolves when --font-X is defined on the same element.
+    // --font-gt-walsheim is only present when the local files exist.
     <html lang="en" className={fontVariableClassName} style={themeStyles}>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
