@@ -5,6 +5,7 @@ import {
   Inter,
   Ubuntu_Sans_Mono,
 } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import "@/app/globals.css";
@@ -32,12 +33,44 @@ const figtree = Figtree({
   variable: "--font-figtree",
   display: "swap",
 });
+const gtWalsheim = localFont({
+  src: [
+    {
+      path: "../fonts/gt-walsheim/GTWalsheimPro-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../fonts/gt-walsheim/GTWalsheimPro-RegularOblique.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../fonts/gt-walsheim/GTWalsheimPro-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/gt-walsheim/GTWalsheimPro-MediumOblique.woff2",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../fonts/gt-walsheim/GTWalsheimPro-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-gt-walsheim",
+  display: "swap",
+});
 
 const fontVariableClassName = [
   inter.variable,
   ebGaramond.variable,
   ubuntuSansMono.variable,
   figtree.variable,
+  gtWalsheim.variable,
 ].join(" ");
 
 export const metadata: Metadata = {

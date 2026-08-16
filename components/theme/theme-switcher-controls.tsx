@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 
@@ -7,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -33,6 +35,13 @@ import {
   type RadiusPresetId,
   type ThemeMode,
 } from "@/lib/theme/theme-customization";
+import {
+  THEME_LOOK_PRESETS,
+  getThemeLookPreset,
+  getThemeLookPresetSwatch,
+  matchThemeLookPreset,
+  type ThemeLookPresetId,
+} from "@/lib/theme/theme-presets";
 import { cn } from "@/lib/utils";
 
 export type ThemeDotSwatch = string | { light: string; dark: string };
@@ -43,10 +52,11 @@ export type ThemeSwitcherOption = {
   swatch: ThemeDotSwatch;
   fontGlyph?: boolean;
   borderRadius?: string;
+  group?: string;
 };
 
 export type ThemeSwitcherControl = {
-  id: "mode" | "accent" | "background" | "font" | "radius";
+  id: "preset" | "mode" | "accent" | "background" | "font" | "radius";
   label: string;
   selectedLabel: string;
   value: string;
@@ -131,7 +141,29 @@ export function useThemeSwitcherControls(): {
   const radiusLabel = radiusPreset.label;
   const radiusGlyph = RADIUS_GLYPH_RADIUS[radiusPreset.id];
 
+  const matchedLook = matchThemeLookPreset(theme);
+  const presetLabel = matchedLook?.name ?? "Custom";
+  const presetSwatch = matchedLook
+    ? getThemeLookPresetSwatch(matchedLook)
+    : accentSwatch;
+
   const controls: ThemeSwitcherControl[] = [
+    {
+      id: "preset",
+      label: "Preset",
+      selectedLabel: presetLabel,
+      value: matchedLook?.id ?? "",
+      swatch: presetSwatch,
+      onChange: (value) => {
+        setTheme(getThemeLookPreset(value as ThemeLookPresetId).settings);
+      },
+      options: THEME_LOOK_PRESETS.map((preset) => ({
+        value: preset.id,
+        label: preset.name,
+        swatch: getThemeLookPresetSwatch(preset),
+        group: preset.appearance === "dark" ? "Dark" : "Light",
+      })),
+    },
     {
       id: "mode",
       label: "Mode",
@@ -227,6 +259,10 @@ export function useThemeSwitcherControls(): {
   return {
     controls,
     summary: {
+      preset: {
+        selectedLabel: presetLabel,
+        swatch: presetSwatch,
+      },
       mode: {
         selectedLabel: modeLabel,
         swatch: modeSwatch,
@@ -330,14 +366,23 @@ function ThemeSwitcherDropdown({
         sideOffset={6}
         className={cn("min-w-[180px]", contentClassName)}
       >
-        {control.options.map((option) => (
-          <ThemeSwitcherDropdownItem
-            key={option.value}
-            option={option}
-            selected={option.value === control.value}
-            onSelect={() => control.onChange(option.value)}
-          />
-        ))}
+        {control.options.map((option, index) => {
+          const previous = control.options[index - 1];
+          const showSeparator =
+            option.group !== undefined &&
+            previous !== undefined &&
+            option.group !== previous.group;
+          return (
+            <Fragment key={option.value}>
+              {showSeparator ? <DropdownMenuSeparator /> : null}
+              <ThemeSwitcherDropdownItem
+                option={option}
+                selected={option.value === control.value}
+                onSelect={() => control.onChange(option.value)}
+              />
+            </Fragment>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -40,6 +40,7 @@ export type ThemeAppearance = Exclude<ThemeMode, "system">;
 export const ACCENT_PRESET_IDS = [
   "sky",
   "ocean",
+  "cobalt",
   "mint",
   "lime",
   "amber",
@@ -57,6 +58,7 @@ export const DARK_NEUTRAL_PALETTE_IDS = [
   "forest",
   "sepia",
   "storm",
+  "velvet",
 ] as const;
 
 export type DarkNeutralPaletteId = (typeof DARK_NEUTRAL_PALETTE_IDS)[number];
@@ -77,6 +79,7 @@ export const FONT_PRESET_IDS = [
   "eb-garamond",
   "ubuntu-sans-mono",
   "figtree",
+  "gt-walsheim",
 ] as const;
 
 export type FontPresetId = (typeof FONT_PRESET_IDS)[number];
@@ -156,6 +159,7 @@ const LIGHT_ACCENT_FOREGROUND = "#f8fbff";
 export const ACCENT_PRESETS: readonly AccentPreset[] = [
   { id: "sky", label: "Sky", color: "#8bb8ff" },
   { id: "ocean", label: "Ocean", color: "#5cc8ff" },
+  { id: "cobalt", label: "Cobalt", color: "#0659c3" },
   { id: "mint", label: "Mint", color: "#53e6c3" },
   { id: "lime", label: "Lime", color: "#9fe870" },
   { id: "amber", label: "Amber", color: "#ffbe55" },
@@ -185,6 +189,12 @@ export const FONT_PRESETS: readonly FontPreset[] = [
     fallback: MONO_FALLBACK,
   },
   { id: "figtree", label: "Figtree", cssVar: "var(--font-figtree)", fallback: SANS_FALLBACK },
+  {
+    id: "gt-walsheim",
+    label: "GT Walsheim Pro",
+    cssVar: "var(--font-gt-walsheim)",
+    fallback: SANS_FALLBACK,
+  },
 ] as const;
 
 /**
@@ -316,6 +326,25 @@ const DARK_NEUTRAL_PALETTES: readonly NeutralPalette<DarkNeutralPaletteId>[] = [
       800: "#272b33",
       900: "#252a32",
       950: "#1f2228",
+    },
+  },
+  {
+    id: "velvet",
+    label: "Velvet",
+    description: "Aubergine dusk from the remibousk.com rebuild",
+    appearance: "dark",
+    scale: {
+      50: "#f4f4f6",
+      100: "#e2e0e8",
+      200: "#c8c5d0",
+      300: "#adaab5",
+      400: "#767282",
+      500: "#5c5668",
+      600: "#413857",
+      700: "#2a2537",
+      800: "#231f2d",
+      900: "#1c1924",
+      950: "#18161e",
     },
   },
 ] as const;
